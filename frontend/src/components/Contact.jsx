@@ -1,7 +1,7 @@
 import React from "react";
 import { MapPin, Instagram, Mail, MessageSquare, ExternalLink } from "lucide-react";
 
-export default function Contact({ setIsContactModalOpen }) {
+export default function Contact() {
   return (
     <section id="kontak" className="py-24 bg-slate-50 animate-fade-in">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,16 +71,7 @@ export default function Contact({ setIsContactModalOpen }) {
 
             </div>
 
-            {/* Quick Actions */}
-            <div className="pt-4">
-              <button 
-                onClick={() => setIsContactModalOpen(true)}
-                className="btn-primary w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl"
-              >
-                <MessageSquare size={18} />
-                Kirim Pesan Langsung
-              </button>
-            </div>
+
 
           </div>
 

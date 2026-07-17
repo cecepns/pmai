@@ -5,11 +5,8 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import VisionMission from "./components/VisionMission";
 import RolesObjectives from "./components/RolesObjectives";
-import Directory from "./components/Directory";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
-import ContactModal from "./components/ContactModal";
-import RegisterModal from "./components/RegisterModal";
 import Login from "./components/admin/Login";
 import Dashboard from "./components/admin/Dashboard";
 import { request } from "./utils/request";
@@ -19,8 +16,6 @@ import { API_ENDPOINTS } from "./utils/endpoints";
 function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [content, setContent] = useState(null);
 
   // Scroll detection
@@ -59,31 +54,19 @@ function LandingPage() {
         isScrolled={isScrolled}
         isMobileMenuOpen={isMobileMenuOpen}
         setIsMobileMenuOpen={setIsMobileMenuOpen}
-        setIsRegisterModalOpen={setIsRegisterModalOpen}
       />
 
       {/* Visual layouts */}
       <main className="flex-grow">
-        <Hero content={content} setIsRegisterModalOpen={setIsRegisterModalOpen} />
+        <Hero content={content} />
         <About content={content} />
         <VisionMission content={content} />
         <RolesObjectives content={content} />
-        <Directory />
-        <Contact setIsContactModalOpen={setIsContactModalOpen} />
+        <Contact />
       </main>
 
       {/* Footer */}
       <Footer />
-
-      {/* Input dialog popups */}
-      <ContactModal 
-        isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
-      />
-      <RegisterModal 
-        isOpen={isRegisterModalOpen}
-        onClose={() => setIsRegisterModalOpen(false)}
-      />
 
     </div>
   );

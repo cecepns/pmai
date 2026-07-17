@@ -2,7 +2,7 @@ import React from "react";
 import { ArrowRight, Award } from "lucide-react";
 import asesorImg from "../assets/asesor.png";
 
-export default function Hero({ content, setIsRegisterModalOpen }) {
+export default function Hero({ content }) {
   const title = content?.hero_title || "Menuju Indonesia Emas dengan Asesor Kompeten";
   const subtitle = content?.hero_subtitle || "Perkumpulan Master Asesor Indonesia (PMAI) bersinergi secara profesional mengembangkan kemampuan asesor untuk mendukung percepatan program Sistem Sertifikasi Nasional.";
 
@@ -50,16 +50,9 @@ export default function Hero({ content, setIsRegisterModalOpen }) {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              <button
-                onClick={() => setIsRegisterModalOpen(true)}
-                className="btn-primary text-base py-3.5 px-8 rounded-full flex items-center justify-center gap-2 group shadow-md shadow-pmai-blue/10"
-              >
-                Mulai Pendaftaran
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </button>
               <a
                 href="#tentang"
-                className="btn-secondary py-3.5 px-8 rounded-full flex items-center justify-center gap-2"
+                className="btn-primary py-3.5 px-8 rounded-full flex items-center justify-center gap-2"
               >
                 Pelajari Selengkapnya
               </a>

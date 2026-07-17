@@ -1,11 +1,10 @@
 import React from "react";
-import { Menu, X, UserPlus } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar({ 
   isScrolled, 
   isMobileMenuOpen, 
-  setIsMobileMenuOpen, 
-  setIsRegisterModalOpen 
+  setIsMobileMenuOpen 
 }) {
   return (
     <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
@@ -31,7 +30,6 @@ export default function Navbar({
               { label: "Tentang", href: "#tentang" },
               { label: "Visi & Misi", href: "#visi-misi" },
               { label: "Peran & Tujuan", href: "#peran-tujuan" },
-              { label: "Direktori Asesor", href: "#direktori" },
               { label: "Kontak", href: "#kontak" }
             ].map((link) => (
               <a 
@@ -44,16 +42,6 @@ export default function Navbar({
             ))}
           </div>
 
-          {/* CTA Button - rounded-full solid blue */}
-          <div className="hidden md:block">
-            <button 
-              onClick={() => setIsRegisterModalOpen(true)}
-              className="btn-primary text-xs py-2 px-5 rounded-full flex items-center gap-1.5"
-            >
-              <UserPlus size={14} />
-              Gabung PMAI
-            </button>
-          </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -77,7 +65,6 @@ export default function Navbar({
             { label: "Tentang", href: "#tentang" },
             { label: "Visi & Misi", href: "#visi-misi" },
             { label: "Peran & Tujuan", href: "#peran-tujuan" },
-            { label: "Direktori Asesor", href: "#direktori" },
             { label: "Kontak", href: "#kontak" }
           ].map((link) => (
             <a 
@@ -89,18 +76,7 @@ export default function Navbar({
               {link.label}
             </a>
           ))}
-          <div className="pt-2">
-            <button 
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                setIsRegisterModalOpen(true);
-              }}
-              className="w-full btn-primary text-sm py-3 px-4 rounded-full flex items-center justify-center gap-2"
-            >
-              <UserPlus size={18} />
-              Gabung PMAI
-            </button>
-          </div>
+
         </div>
       </div>
     </nav>
