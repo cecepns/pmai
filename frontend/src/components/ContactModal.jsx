@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, MessageSquare, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { request } from "../utils/request";
@@ -8,6 +8,17 @@ export default function ContactModal({ isOpen, onClose }) {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -56,7 +67,7 @@ export default function ContactModal({ isOpen, onClose }) {
       ></div>
 
       {/* Modal body */}
-      <div className="bg-white border border-slate-200 rounded-3xl shadow-2xl relative z-10 w-full max-w-lg p-6 sm:p-8 animate-fade-in">
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-2xl relative z-10 w-full max-w-lg p-6 sm:p-8 animate-fade-in overflow-y-auto max-h-[90vh] hide-scrollbar-mobile">
         
         <button 
           onClick={onClose}

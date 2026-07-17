@@ -56,6 +56,18 @@
   }
 }
 
+@layer utilities {
+  @media (max-width: 768px) {
+    .hide-scrollbar-mobile::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar-mobile {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
+}
+
 /* Custom visual micro-animations */
 .animate-delay-100 {
   animation-delay: 100ms;
