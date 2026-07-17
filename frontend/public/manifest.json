@@ -1,0 +1,28 @@
+{
+  "name": "Perkumpulan Master Asesor Indonesia",
+  "short_name": "PMAI",
+  "description": "Organisasi untuk mengembangkan kemampuan Master Asesor di seluruh Indonesia.",
+  "theme_color": "#0B4596",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

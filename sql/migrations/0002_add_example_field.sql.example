@@ -1,0 +1,12 @@
+-- Migration: 0002_add_example_field
+-- Created At: 2026-07-16
+-- Description: Contoh penulisan migrasi perubahan kolom tabel (contoh menambah kolom alamat ke tabel admin)
+
+USE pmai_db;
+
+-- 1. Jalankan ALTER TABLE dengan aman
+-- Menambah kolom 'address' bertipe TEXT yang opsional ke tabel 'admins'
+ALTER TABLE admins ADD COLUMN IF NOT EXISTS address TEXT DEFAULT NULL;
+
+-- 2. Mengubah panjang kolom jika diperlukan
+-- ALTER TABLE admins MODIFY COLUMN username VARCHAR(100) NOT NULL;

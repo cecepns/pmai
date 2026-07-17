@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-slate-800 bg-slate-50 selection:bg-pmai-blue/20 selection:text-pmai-blue;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Custom Scrollbar for modern web experience */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
+  }
+}
+
+@layer components {
+  /* Glassmorphism card utility */
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+  
+  .glass-card-dark {
+    @apply bg-slate-900/80 backdrop-blur-md border border-slate-800 shadow-xl;
+  }
+  
+  /* Text gradient styles */
+  .text-gradient-blue {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-pmai-blue to-pmai-blue-light;
+  }
+  
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-yellow-400;
+  }
+  
+  /* Interactive Buttons matching sample design */
+  .btn-primary {
+    @apply px-6 py-3 text-white bg-pmai-blue hover:bg-pmai-blue-dark rounded-full shadow-md hover:shadow-pmai-blue/20 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center font-semibold;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-full shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center font-semibold;
+  }
+
+  .btn-accent {
+    @apply px-6 py-3 text-white bg-pmai-blue hover:bg-pmai-blue-dark rounded-full shadow-md hover:shadow-pmai-blue/20 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center font-semibold;
+  }
+}
+
+/* Custom visual micro-animations */
+.animate-delay-100 {
+  animation-delay: 100ms;
+}
+.animate-delay-200 {
+  animation-delay: 200ms;
+}
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+
+/* Image loading overlay placeholder animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-placeholder {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
