@@ -30,6 +30,7 @@ export default function Navbar({
               { label: "Tentang", href: "#tentang" },
               { label: "Visi & Misi", href: "#visi-misi" },
               { label: "Peran & Tujuan", href: "#peran-tujuan" },
+              { label: "Kegiatan", href: "#kegiatan" },
               { label: "Kontak", href: "#kontak" }
             ].map((link) => (
               <a 
@@ -65,6 +66,7 @@ export default function Navbar({
             { label: "Tentang", href: "#tentang" },
             { label: "Visi & Misi", href: "#visi-misi" },
             { label: "Peran & Tujuan", href: "#peran-tujuan" },
+            { label: "Kegiatan", href: "#kegiatan" },
             { label: "Kontak", href: "#kontak" }
           ].map((link) => (
             <a 

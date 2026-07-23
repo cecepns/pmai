@@ -20,5 +20,11 @@ export const API_ENDPOINTS = {
     LIST: "/messages",
     READ: (id) => `/messages/${id}/read`,
     DELETE: (id) => `/messages/${id}`,
+  },
+  ACTIVITIES: {
+    LIST: "/activities",
+    CREATE: "/activities",
+    UPDATE: (id) => `/activities/${id}`,
+    DELETE: (id) => `/activities/${id}`,
   }
 };

@@ -80,3 +80,18 @@ INSERT INTO messages (name, email, subject, message) VALUES
 ('Dewi Lestari', 'dewi.lestari@yahoo.com', 'Permohonan Kemitraan', 'Kami dari LSP Informatika ingin mengajukan kemitraan peminjaman asesor bidang Artificial Intelligence.'),
 ('Ahmad Fauzan', 'ahmad.f@outlook.com', 'Undangan Rapat Pleno', 'Mengundang jajaran pengurus PMAI dalam rapat penyusunan draf SKKNI sektor konstruksi.')
 ON DUPLICATE KEY UPDATE id=id;
+
+-- 5. Activities Table (Foto Kegiatan)
+CREATE TABLE IF NOT EXISTS activities (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  image VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Mock Activities
+INSERT INTO activities (title, description, image) VALUES
+('Rapat Kerja Nasional 2025', 'Diskusi strategis mengenai pengembangan kompetensi asesor di tingkat nasional.', NULL),
+('Pelatihan Sertifikasi Asesor', 'Pelatihan intensif untuk calon asesor baru di Jakarta.', NULL)
+ON DUPLICATE KEY UPDATE id=id;

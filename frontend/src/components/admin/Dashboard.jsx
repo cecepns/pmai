@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  Shield, LogOut, FileText, Users, Mail, Menu, X, Save, 
+import {
+  Shield, LogOut, FileText, Users, Mail, Menu, X, Save,
   Trash2, Check, RefreshCw, Eye, Loader2, ArrowLeft,
-  ChevronLeft, ChevronRight, Search, Plus
+  ChevronLeft, ChevronRight, Search, Plus, Image as ImageIcon
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { request } from "../../utils/request";
 import { API_ENDPOINTS } from "../../utils/endpoints";
+import AdminActivities from "./Activities";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("content");
@@ -249,12 +250,11 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex text-slate-800 font-sans relative">
-      
+
       {/* SIDEBAR - Desktop and Mobile (Responsive side drawer) */}
-      <aside className={`fixed inset-y-0 left-0 z-40 bg-slate-900 text-white border-r border-slate-800 transition-all duration-300 flex flex-col justify-between ${
-        isMobileSidebarOpen ? "translate-x-0 w-64" : "md:translate-x-0 -translate-x-full " + (isSidebarCollapsed ? "w-20" : "w-64")
-      }`}>
-        
+      <aside className={`fixed inset-y-0 left-0 z-40 bg-slate-900 text-white border-r border-slate-800 transition-all duration-300 flex flex-col justify-between ${isMobileSidebarOpen ? "translate-x-0 w-64" : "md:translate-x-0 -translate-x-full " + (isSidebarCollapsed ? "w-20" : "w-64")
+        }`}>
+
         <div>
           {/* Sidebar Header */}
           <div className="p-5 border-b border-slate-800 flex justify-between items-center">
@@ -269,7 +269,7 @@ export default function Dashboard() {
               )}
             </div>
             {/* Mobile close toggle */}
-            <button 
+            <button
               onClick={() => setIsMobileSidebarOpen(false)}
               className="md:hidden p-1.5 rounded-lg hover:bg-slate-800 transition-colors"
             >
@@ -282,7 +282,8 @@ export default function Dashboard() {
             {[
               { id: "content", label: "Kelola Konten", icon: <FileText size={20} /> },
               { id: "assessors", label: "Kelola Asesor", icon: <Users size={20} /> },
-              { id: "messages", label: "Pesan Masuk", icon: <Mail size={20} /> }
+              { id: "messages", label: "Pesan Masuk", icon: <Mail size={20} /> },
+              { id: "activities", label: "Foto Kegiatan", icon: <ImageIcon size={20} /> }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -290,11 +291,10 @@ export default function Dashboard() {
                   setActiveTab(tab.id);
                   setIsMobileSidebarOpen(false);
                 }}
-                className={`w-full flex items-center gap-3.5 p-3 rounded-xl text-sm font-semibold transition-all ${
-                  activeTab === tab.id 
-                    ? "bg-pmai-blue text-white shadow-md shadow-pmai-blue/15" 
+                className={`w-full flex items-center gap-3.5 p-3 rounded-xl text-sm font-semibold transition-all ${activeTab === tab.id
+                    ? "bg-pmai-blue text-white shadow-md shadow-pmai-blue/15"
                     : "text-slate-400 hover:bg-slate-800 hover:text-white"
-                }`}
+                  }`}
               >
                 <div className="shrink-0">{tab.icon}</div>
                 {(!isSidebarCollapsed || isMobileSidebarOpen) && <span>{tab.label}</span>}
@@ -325,23 +325,22 @@ export default function Dashboard() {
 
       {/* BACKGROUND SIDEBAR OVERLAY FOR MOBILE */}
       {isMobileSidebarOpen && (
-        <div 
+        <div
           onClick={() => setIsMobileSidebarOpen(false)}
           className="fixed inset-0 z-30 bg-slate-950/40 backdrop-blur-xs md:hidden"
         ></div>
       )}
 
       {/* MAIN CONTAINER */}
-      <div className={`flex-grow min-h-screen flex flex-col transition-all duration-300 ${
-        isSidebarCollapsed ? "md:pl-20" : "md:pl-64"
-      }`}>
-        
+      <div className={`flex-grow min-h-screen flex flex-col transition-all duration-300 ${isSidebarCollapsed ? "md:pl-20" : "md:pl-64"
+        }`}>
+
         {/* TOP HEADER */}
         <header className="bg-white border-b border-slate-100 py-4 px-6 flex justify-between items-center sticky top-0 z-20">
           <div className="flex items-center gap-4">
-            
+
             {/* Desktop Collapse toggler */}
-            <button 
+            <button
               onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
               className="hidden md:block p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-600"
             >
@@ -349,7 +348,7 @@ export default function Dashboard() {
             </button>
 
             {/* Mobile Sidebar toggler */}
-            <button 
+            <button
               onClick={() => setIsMobileSidebarOpen(true)}
               className="md:hidden p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-600"
             >
@@ -372,11 +371,11 @@ export default function Dashboard() {
 
         {/* WORKSPACE CONTENT AREA */}
         <main className="p-6 sm:p-8 flex-grow">
-          
+
           {/* TAB 1: MANAGE LANDING PAGE CONTENT */}
           {activeTab === "content" && (
             <form onSubmit={handleSaveContent} className="max-w-4xl space-y-8 animate-fade-in">
-              
+
               {/* Card - Hero */}
               <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
                 <h3 className="text-md font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
@@ -386,8 +385,8 @@ export default function Dashboard() {
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Judul Utama (Title)</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={heroTitle}
                       onChange={(e) => setHeroTitle(e.target.value)}
                       className="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-pmai-blue"
@@ -395,7 +394,7 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Sub-Judul (Subtitle)</label>
-                    <textarea 
+                    <textarea
                       rows="3"
                       value={heroSubtitle}
                       onChange={(e) => setHeroSubtitle(e.target.value)}
@@ -414,7 +413,7 @@ export default function Dashboard() {
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Deskripsi Tentang Kami</label>
-                    <textarea 
+                    <textarea
                       rows="4"
                       value={aboutText}
                       onChange={(e) => setAboutText(e.target.value)}
@@ -423,7 +422,7 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Teks Visi Organisasi</label>
-                    <textarea 
+                    <textarea
                       rows="3"
                       value={visiText}
                       onChange={(e) => setVisiText(e.target.value)}
@@ -440,8 +439,8 @@ export default function Dashboard() {
                     <span className="w-1.5 h-4 bg-pmai-blue rounded-full"></span>
                     Misi Organisasi
                   </h3>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={addMisiItem}
                     className="btn-secondary py-1.5 px-3 rounded-xl text-xs flex items-center gap-1"
                   >
@@ -454,15 +453,15 @@ export default function Dashboard() {
                       <span className="w-8 h-8 rounded-lg bg-slate-100 text-xs font-bold flex items-center justify-center shrink-0">
                         {idx + 1}
                       </span>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={item}
                         onChange={(e) => updateMisiItem(idx, e.target.value)}
                         className="flex-grow px-4 py-2 bg-slate-50/50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-pmai-blue"
                         placeholder="Tulis poin misi baru..."
                       />
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={() => removeMisiItem(idx)}
                         className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors shrink-0"
                       >
@@ -483,8 +482,8 @@ export default function Dashboard() {
                     <span className="w-1.5 h-4 bg-pmai-blue rounded-full"></span>
                     Peran Organisasi
                   </h3>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={addPeranItem}
                     className="btn-secondary py-1.5 px-3 rounded-xl text-xs flex items-center gap-1"
                   >
@@ -497,15 +496,15 @@ export default function Dashboard() {
                       <span className="w-8 h-8 rounded-lg bg-slate-100 text-xs font-bold flex items-center justify-center shrink-0">
                         {idx + 1}
                       </span>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={item}
                         onChange={(e) => updatePeranItem(idx, e.target.value)}
                         className="flex-grow px-4 py-2 bg-slate-50/50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-pmai-blue"
                         placeholder="Tulis poin peran baru..."
                       />
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={() => removePeranItem(idx)}
                         className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors shrink-0"
                       >
@@ -546,16 +545,16 @@ export default function Dashboard() {
           {/* TAB 2: MANAGE ASSESSORS */}
           {activeTab === "assessors" && (
             <div className="space-y-6 animate-fade-in">
-              
+
               {/* Filter controls matching rules */}
               <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
                 <div className="grid md:grid-cols-12 gap-4 items-center">
-                  
+
                   {/* Search */}
                   <div className="md:col-span-5 relative">
                     <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       placeholder="Cari nama, No Reg, atau provinsi..."
                       value={assessorSearch}
                       onChange={(e) => setAssessorSearch(e.target.value)}
@@ -566,7 +565,7 @@ export default function Dashboard() {
                   {/* Limit Selection */}
                   <div className="md:col-span-3 flex items-center gap-2 text-sm text-slate-500 justify-end md:justify-start">
                     <span>Limit:</span>
-                    <select 
+                    <select
                       value={assessorLimit}
                       onChange={(e) => {
                         setAssessorLimit(Number(e.target.value));
@@ -636,24 +635,22 @@ export default function Dashboard() {
                             <td className="p-4 text-sm text-slate-600">{item.bidang}</td>
                             <td className="p-4 text-sm text-slate-600">{item.provinsi}</td>
                             <td className="p-4 text-sm">
-                              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                                item.status === "Aktif" 
-                                  ? "bg-emerald-100 text-emerald-800" 
-                                  : item.status === "Pending" 
-                                    ? "bg-amber-100 text-amber-800" 
+                              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${item.status === "Aktif"
+                                  ? "bg-emerald-100 text-emerald-800"
+                                  : item.status === "Pending"
+                                    ? "bg-amber-100 text-amber-800"
                                     : "bg-slate-100 text-slate-800"
-                              }`}>
-                                <span className={`w-1.5 h-1.5 rounded-full ${
-                                  item.status === "Aktif" ? "bg-emerald-500" : item.status === "Pending" ? "bg-amber-500" : "bg-slate-400"
-                                }`}></span>
+                                }`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${item.status === "Aktif" ? "bg-emerald-500" : item.status === "Pending" ? "bg-amber-500" : "bg-slate-400"
+                                  }`}></span>
                                 {item.status}
                               </span>
                             </td>
                             <td className="p-4 text-sm">
                               {item.cv_file ? (
-                                <a 
-                                  href={`http://localhost:5000/uploads/${item.cv_file}`} 
-                                  target="_blank" 
+                                <a
+                                  href={`https://api.kingcreativestudio.my.id/pmai/uploads/${item.cv_file}`}
+                                  target="_blank"
                                   rel="noreferrer"
                                   className="text-xs font-semibold text-pmai-blue hover:underline inline-flex items-center gap-1"
                                 >
@@ -730,12 +727,12 @@ export default function Dashboard() {
           {/* TAB 3: CONTACT INBOX MESSAGES */}
           {activeTab === "messages" && (
             <div className="grid lg:grid-cols-12 gap-6 items-start animate-fade-in">
-              
+
               {/* Inbox Message List */}
               <div className="lg:col-span-5 bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm">
                 <div className="p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
                   <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider">Inbox</h4>
-                  <button 
+                  <button
                     onClick={fetchMessages}
                     className="p-1.5 text-slate-600 hover:bg-slate-200 rounded-lg"
                   >
@@ -752,12 +749,11 @@ export default function Dashboard() {
                     <p className="p-8 text-center text-slate-400 text-xs">Inbox Anda kosong.</p>
                   ) : (
                     messages.map((item) => (
-                      <div 
+                      <div
                         key={item.id}
                         onClick={() => handleReadMessage(item)}
-                        className={`p-4 cursor-pointer hover:bg-slate-50 transition-colors ${
-                          !item.is_read ? "bg-sky-50/20 border-l-4 border-pmai-blue" : ""
-                        } ${selectedMessage?.id === item.id ? "bg-slate-100/50" : ""}`}
+                        className={`p-4 cursor-pointer hover:bg-slate-50 transition-colors ${!item.is_read ? "bg-sky-50/20 border-l-4 border-pmai-blue" : ""
+                          } ${selectedMessage?.id === item.id ? "bg-slate-100/50" : ""}`}
                       >
                         <div className="flex justify-between items-start">
                           <span className="font-bold text-sm text-slate-800 truncate max-w-[150px]">{item.name}</span>
@@ -821,6 +817,9 @@ export default function Dashboard() {
 
             </div>
           )}
+
+          {/* TAB 4: ACTIVITIES */}
+          {activeTab === "activities" && <AdminActivities />}
 
         </main>
       </div>

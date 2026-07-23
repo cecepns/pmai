@@ -94,6 +94,11 @@ let mockMessages = [
   { id: 2, name: "Dewi Lestari", email: "dewi.lestari@yahoo.com", subject: "Permohonan Kemitraan", message: "Kami dari LSP Informatika ingin mengajukan kemitraan peminjaman asesor bidang Artificial Intelligence.", is_read: true, created_at: new Date() }
 ];
 
+let mockActivities = [
+  { id: 1, title: "Rapat Kerja Nasional 2025", description: "Diskusi strategis mengenai pengembangan kompetensi asesor di tingkat nasional.", image: null, created_at: new Date() },
+  { id: 2, title: "Pelatihan Sertifikasi Asesor", description: "Pelatihan intensif untuk calon asesor baru di Jakarta.", image: null, created_at: new Date() }
+];
+
 // =========================================================================
 // AUTHENTICATION INTERCEPTOR MIDDLEWARE
 // =========================================================================
@@ -131,6 +136,29 @@ const upload = multer({
       cb(null, true);
     } else {
       cb(new Error("Hanya berkas format PDF yang diperbolehkan!"), false);
+    }
+  },
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
+
+const storageImage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, "activity-" + uniqueSuffix + ext);
+  }
+});
+
+const uploadImage = multer({
+  storage: storageImage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Hanya berkas gambar (JPG, PNG, dll) yang diperbolehkan!"), false);
     }
   },
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
@@ -526,6 +554,162 @@ app.delete("/api/messages/:id", authenticateToken, async (req, res) => {
       return res.status(404).json({ success: false, message: "Pesan tidak ditemukan." });
     }
     res.json({ success: true, message: "Pesan berhasil dihapus." });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- 5. Activities Endpoints ---
+app.get("/api/activities", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const search = req.query.search || "";
+  const offset = (page - 1) * limit;
+
+  if (useLocalMock) {
+    let list = [...mockActivities];
+    if (search) {
+      const q = search.toLowerCase();
+      list = list.filter(item => 
+        item.title.toLowerCase().includes(q) || 
+        (item.description && item.description.toLowerCase().includes(q))
+      );
+    }
+    list.sort((a, b) => b.created_at - a.created_at);
+    const paginatedData = list.slice(offset, offset + limit);
+    return res.json({
+      success: true,
+      data: paginatedData,
+      pagination: {
+        page,
+        limit,
+        total: list.length,
+        totalPages: Math.ceil(list.length / limit)
+      }
+    });
+  }
+
+  try {
+    let queryParams = [];
+    let whereClause = "";
+
+    if (search) {
+      whereClause = "WHERE title LIKE ? OR description LIKE ?";
+      const term = `%${search}%`;
+      queryParams.push(term, term);
+    }
+
+    const [totalRows] = await pool.query(`SELECT COUNT(*) as count FROM activities ${whereClause}`, queryParams);
+    const total = totalRows[0].count;
+
+    const [rows] = await pool.query(
+      `SELECT * FROM activities ${whereClause} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
+      [...queryParams, limit, offset]
+    );
+
+    res.json({
+      success: true,
+      data: rows,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post("/api/activities", authenticateToken, (req, res) => {
+  uploadImage.single("image")(req, res, async (err) => {
+    if (err) return res.status(400).json({ success: false, message: err.message });
+
+    const { title, description } = req.body;
+    if (!title) return res.status(400).json({ success: false, message: "Judul kegiatan wajib diisi." });
+
+    const imageName = req.file ? req.file.filename : null;
+
+    if (useLocalMock) {
+      const newActivity = {
+        id: mockActivities.length > 0 ? Math.max(...mockActivities.map(a => a.id)) + 1 : 1,
+        title,
+        description,
+        image: imageName,
+        created_at: new Date()
+      };
+      mockActivities.push(newActivity);
+      return res.json({ success: true, message: "Kegiatan berhasil ditambahkan.", data: newActivity });
+    }
+
+    try {
+      const [result] = await pool.query(
+        "INSERT INTO activities (title, description, image) VALUES (?, ?, ?)",
+        [title, description, imageName]
+      );
+      res.json({ success: true, message: "Kegiatan berhasil ditambahkan.", data: { id: result.insertId, title, image: imageName } });
+    } catch (dbErr) {
+      res.status(500).json({ success: false, error: dbErr.message });
+    }
+  });
+});
+
+app.put("/api/activities/:id", authenticateToken, (req, res) => {
+  uploadImage.single("image")(req, res, async (err) => {
+    if (err) return res.status(400).json({ success: false, message: err.message });
+
+    const { title, description } = req.body;
+    const actId = req.params.id;
+    const imageName = req.file ? req.file.filename : undefined;
+
+    if (!title) return res.status(400).json({ success: false, message: "Judul kegiatan wajib diisi." });
+
+    if (useLocalMock) {
+      const idx = mockActivities.findIndex(a => a.id == actId);
+      if (idx === -1) return res.status(404).json({ success: false, message: "Kegiatan tidak ditemukan." });
+      
+      mockActivities[idx].title = title;
+      mockActivities[idx].description = description;
+      if (imageName !== undefined) {
+        mockActivities[idx].image = imageName;
+      }
+      return res.json({ success: true, message: "Kegiatan berhasil diperbarui." });
+    }
+
+    try {
+      if (imageName !== undefined) {
+        await pool.query(
+          "UPDATE activities SET title = ?, description = ?, image = ? WHERE id = ?",
+          [title, description, imageName, actId]
+        );
+      } else {
+        await pool.query(
+          "UPDATE activities SET title = ?, description = ? WHERE id = ?",
+          [title, description, actId]
+        );
+      }
+      res.json({ success: true, message: "Kegiatan berhasil diperbarui." });
+    } catch (dbErr) {
+      res.status(500).json({ success: false, error: dbErr.message });
+    }
+  });
+});
+
+app.delete("/api/activities/:id", authenticateToken, async (req, res) => {
+  const actId = req.params.id;
+
+  if (useLocalMock) {
+    const idx = mockActivities.findIndex(a => a.id == actId);
+    if (idx === -1) return res.status(404).json({ success: false, message: "Kegiatan tidak ditemukan." });
+    mockActivities.splice(idx, 1);
+    return res.json({ success: true, message: "Kegiatan berhasil dihapus." });
+  }
+
+  try {
+    const [result] = await pool.query("DELETE FROM activities WHERE id = ?", [actId]);
+    if (result.affectedRows === 0) return res.status(404).json({ success: false, message: "Kegiatan tidak ditemukan." });
+    res.json({ success: true, message: "Kegiatan berhasil dihapus." });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

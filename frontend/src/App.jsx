@@ -5,6 +5,7 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import VisionMission from "./components/VisionMission";
 import RolesObjectives from "./components/RolesObjectives";
+import Activities from "./components/Activities";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Login from "./components/admin/Login";
@@ -62,6 +63,7 @@ function LandingPage() {
         <About content={content} />
         <VisionMission content={content} />
         <RolesObjectives content={content} />
+        <Activities />
         <Contact />
       </main>
 
